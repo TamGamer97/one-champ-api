@@ -68,13 +68,6 @@ function displayFixtures(fixtures) {
   });
 }
 
-// (async () => {
-//   const fixtures = await scrapePremierLeagueFixtures();
-//   displayFixtures(fixtures);
-  
-//   // Log raw data as JSON
-//   console.log(JSON.stringify(fixtures, null, 2));
-// })();
 
 
 
@@ -82,7 +75,13 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req,res)=> {
-    res.send('hello')
+    (async () => {
+      const fixtures = await scrapePremierLeagueFixtures();
+      displayFixtures(fixtures);
+      
+      // Log raw data as JSON
+      res.send(JSON.stringify(fixtures, null, 2))
+    })();
 })
 
 
