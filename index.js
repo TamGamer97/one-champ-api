@@ -76,6 +76,6 @@ app.get('/Team-Info', async(req, res) => {
   res.send(teamsInfo)
 })
 
-app.listen(4000, () => {console.log('Listening on port 4000'); console.log('One Champ Api')})
+app.listen(5000, () => {console.log('Listening on port 5000'); console.log('One Champ Api')})
 
 module.exports = app
