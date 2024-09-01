@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 })
 
-app.get('/Premier-League-Fixtures', async(req, res) => {
+app.get('/PremierLeague-Fixtures', async(req, res) => {
     async function scrapePremierLeagueFixtures() {
       try {
         // Fetch the HTML from the website
