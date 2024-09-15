@@ -67,7 +67,7 @@ app.get('/PremierLeague-Fixtures', async(req, res) => {
       }
     }
 
-    console.log('load')
+    console.log('load data')
       const f =  await scrapePremierLeagueFixtures()
 
       res.send(f)
