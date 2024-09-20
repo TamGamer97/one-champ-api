@@ -1,8 +1,4 @@
 const express = require('express')
-const axios = require('axios');
-const cheerio = require('cheerio');
-
-const { JSDOM } = require('jsdom');
 
 
 const app = express()
@@ -11,6 +7,8 @@ const app = express()
 // https://dashboard.back4app.com/apps
 // https://github.com/TamGamer97/one-champ-api/tree/back4app - back4app branch
 
+const { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures } = require('./functions.js');
+
 
 app.get('/', (req, res) => {
     
@@ -18,77 +16,21 @@ app.get('/', (req, res) => {
 
 })
 
+app.get('/Premier-League-Table', async(req, res) => {
+
+  res.send(await scrapeTable())
+
+})
+
 app.get('/generate-user-id', async(req, res) => { // figure out how to pass in email to request
-    // Get the first 4 characters of the username (or less if the username is shorter)
-    let shortUsername = email.substring(0, 4);
-
-    // Get the current date and time
-    let now = new Date();
-    
-    // Extract time (in milliseconds) and date components
-    let timeInMillis = now.getTime(); // Returns the time in milliseconds since Jan 1, 1970
-
-    // Combine the shortUsername, timeInMillis, and year to form the userId
-    let userId = `${shortUsername}${timeInMillis}`;
-
-    return userId;
+  res.send(await generateUniqueUserId())
 })
 
 app.get('/Premier-League-Fixtures', async(req, res) => {
-    async function scrapePremierLeagueFixtures() {
-      try {
-        // Fetch the HTML from the website
-        const { data: html } = await axios.get('https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures');
-    
-        // Load the HTML into cheerio
-        const $ = cheerio.load(html);
-    
-        const table = $('table');
 
-    
-        if (!table.length) {
-          console.log('Table not found. The website structure might have changed.');
-          return null;
-        }
-    
-        const fixtures = [];
-    
-        // Traverse the rows in the table's tbody
-        $('tbody tr').each((index, element) => {
-          const date = $(element).find('td[data-stat="date"]').text().trim();
-          const time = $(element).find('td[data-stat="start_time"]').text().trim();
-          const homeTeam = $(element).find('td[data-stat="home_team"] a').text().trim();
-          let score = $(element).find('td[data-stat="score"] a').text().trim();
-          const awayTeam = $(element).find('td[data-stat="away_team"] a').text().trim();
-    
-          if (score === '') {
-            score = 'not played';
-          }
-    
-          if (homeTeam) {
-            fixtures.push({
-              Date: date,
-              Time: time,
-              Team1: homeTeam,
-              Team2: awayTeam,
-              Score: score,
-            });
-          }
-        });
-    
-        return fixtures;
-      } catch (error) {
-        console.error('Error scraping data:', error);
-        return null;
-      }
-    }
+  res.send(await scrapePremierLeagueFixtures())
 
-    console.log('efe')
-      const f =  await scrapePremierLeagueFixtures()
-
-      res.send(f)
-
-    })
+})
 
   
     
