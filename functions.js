@@ -1,6 +1,5 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { JSDOM } = require('jsdom');
 
 async function scrapeTable() {
     try {
@@ -103,6 +102,8 @@ async function scrapePremierLeagueFixtures() {
       return fixtures;
     } catch (error) {
       console.error('Error scraping data:', error);
+      const retryAfter = error.response.headers['retry-after'];
+      console.log('429 so retry after: ' + retryAfter)
       return null;
     }
 }
