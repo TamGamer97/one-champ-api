@@ -18,7 +18,7 @@ async function scrapeTable() {
         // console.log(element)
         const teamName = $(element).find('td[data-stat="team"]').text().trim();
         const wins = $(element).find('td[data-stat="wins"]').text().trim();
-        const draws = $(element).find('td[data-stat="draws"]').text().trim();
+        const draws = $(element).find('td[data-stat="ties"]').text().trim();
         const losses = $(element).find('td[data-stat="losses"]').text().trim();
         const points = $(element).find('td[data-stat="points"]').text().trim();
 
