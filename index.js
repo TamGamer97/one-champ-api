@@ -102,7 +102,7 @@ app.get('/Team-Info', async(req, res) => {
 
 
   const teamImages = [
-    { name: "Arsenal FC", crestUrl: "https://crests.football-data.org/57.png" },
+    { name: "Arsenal", crestUrl: "https://crests.football-data.org/57.png" },
     { name: "Aston Villa FC", crestUrl: "https://crests.football-data.org/58.png" },
     { name: "Blackburn Rovers FC", crestUrl: "https://crests.football-data.org/59.png" },
     { name: "Bolton Wanderers FC", crestUrl: "https://crests.football-data.org/60.png" },
@@ -136,7 +136,7 @@ app.get('/Team-Info', async(req, res) => {
     { name: "AFC Wimbledon", crestUrl: "https://crests.football-data.org/347.png" },
     { name: "Charlton Athletic FC", crestUrl: "https://crests.football-data.org/348.png" },
     { name: "Ipswich Town FC", crestUrl: "https://crests.football-data.org/349.png" },
-    { name: "Nottingham Forest", crestUrl: "https://crests.football-data.org/351.png" },
+    { name: "Nott'ham Forest", crestUrl: "https://crests.football-data.org/351.png" },
     { name: "Crystal Palace FC", crestUrl: "https://crests.football-data.org/354.png" },
     { name: "Reading FC", crestUrl: "https://crests.football-data.org/355.png" },
     { name: "Sheffield United FC", crestUrl: "https://crests.football-data.org/356.png" },
@@ -148,7 +148,7 @@ app.get('/Team-Info', async(req, res) => {
     { name: "Luton Town FC", crestUrl: "https://crests.football-data.org/389.png" },
     { name: "Notts County FC", crestUrl: "https://crests.football-data.org/391.png" },
     { name: "Huddersfield Town AFC", crestUrl: "https://crests.football-data.org/394.png" },
-    { name: "Brighton & Hove Albion FC", crestUrl: "https://crests.football-data.org/397.png" },
+    { name: "Brighton", crestUrl: "https://crests.football-data.org/397.png" },
     { name: "Leyton Orient FC", crestUrl: "https://crests.football-data.org/399.png" },
     { name: "Brentford FC", crestUrl: "https://crests.football-data.org/402.png" },
     { name: "Milton Keynes Dons FC", crestUrl: "https://crests.football-data.org/409.png" },
