@@ -34,10 +34,8 @@ app.get('/generate-user-id/:email', async(req, res) => {
 })
 
 app.get('/crypt-password/:password/:encrypt', async(req, res) => {
-  const password = req.params.password;
-  const isEncrypt = req.params.encrypt
-  console.log(password)
-  console.log(isEncrypt)
+  const password = JSON.stringify(req.params.password)
+  const isEncrypt = JSON.parse(req.params.encrypt)
   res.send(passwordCrypto(password, isEncrypt))
 })
 
