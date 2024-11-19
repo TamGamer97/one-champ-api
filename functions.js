@@ -71,10 +71,10 @@ function passwordCrypto(password, KEY, encrypt = true) {
   if (!password || !KEY) {
       throw new Error('Text and secret key are required');
   }
+  const KEY = 'pmahCenO'
 
   // Simple Vigenère cipher implementation
   function processText(input, mode) {
-      const KEY = 'pmahCenO'
 
       let result = '';
       const keyLength = KEY.length;
