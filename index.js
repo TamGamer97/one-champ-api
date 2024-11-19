@@ -24,6 +24,7 @@ app.get('/Premier-League-Table', async(req, res) => {
 
 app.get('/generate-user-id/:email', async(req, res) => { // figure out how to pass in email to request
   const email = req.params.email; // Access the route parameter
+  console.log(email)
   res.send(await generateUniqueUserId(email))
 })
 
