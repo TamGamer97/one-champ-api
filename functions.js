@@ -1,10 +1,15 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const proxy = {
+  host: '108.170.12.14', // Proxy server IP
+  port: 80
+};
+
 async function scrapeTable() {
     try {
       // Fetching the webpage content
-      const { data } = await axios.get('https://fbref.com/en/comps/9/Premier-League-Stats');
+      const { data } = await axios.get('https://fbref.com/en/comps/9/Premier-League-Stats', {proxy});
 
       // Load the content into cheerio
       const $ = cheerio.load(data);
@@ -41,10 +46,13 @@ async function scrapeTable() {
     }
 }
 
-async function generateUniqueUserId()
+async function generateUniqueUserId(email)
 {
+    // Get first part of the email
+    const emailLocal = email.split('@')[0]
+
     // Get the first 4 characters of the username (or less if the username is shorter)
-    let shortUsername = email.substring(0, 4);
+    let shortUsername = emailLocal.substring(0, 4);
 
     // Get the current date and time
     let now = new Date();
@@ -55,13 +63,14 @@ async function generateUniqueUserId()
     // Combine the shortUsername, timeInMillis, and year to form the userId
     let userId = `${shortUsername}${timeInMillis}`;
 
+    console.log('USERID CREATED: ' + userId)
     return userId;
 }
 
 async function scrapePremierLeagueFixtures() {
     try {
       // Fetch the HTML from the website
-      const { data: html } = await axios.get('https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures');
+      const { data: html } = await axios.get('https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures', {proxy});
 
       // Load the HTML into cheerio
       const $ = cheerio.load(html);
@@ -102,8 +111,13 @@ async function scrapePremierLeagueFixtures() {
       return fixtures;
     } catch (error) {
       console.error('Error scraping data:', error);
-      const retryAfter = error.response.headers['retry-after'];
-      console.log('429 so retry after: ' + retryAfter)
+      try{
+
+        const retryAfter = error.response.headers['retry-after'];
+        console.log('429 so retry after: ' + retryAfter)
+      }catch{
+
+      }
       return null;
     }
 }
