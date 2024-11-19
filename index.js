@@ -7,7 +7,7 @@ const app = express()
 // https://dashboard.back4app.com/apps
 // https://github.com/TamGamer97/one-champ-api/tree/back4app - back4app branch
 
-const { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures } = require('./functions.js');
+const { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures, passwordCrypto } = require('./functions.js');
 
 
 app.get('/', (req, res) => {
@@ -36,7 +36,7 @@ app.get('/generate-user-id/:email', async(req, res) => {
 app.get('/crypt-password/:password/:encrypt', async(req, res) => {
   const password = req.params.password;
   const isEncrypt = req.params.encrypt
-  res.send(await passwordCrypto(password, isEncrypt))
+  res.send(passwordCrypto(password, isEncrypt))
 })
 
 
