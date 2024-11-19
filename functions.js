@@ -67,6 +67,59 @@ async function generateUniqueUserId(email)
     return userId;
 }
 
+function passwordCrypto(password, KEY, encrypt = true) {
+  if (!password || !KEY) {
+      throw new Error('Text and secret key are required');
+  }
+
+  // Simple Vigenère cipher implementation
+  function processText(input, mode) {
+      const KEY = 'pmahCenO'
+
+      let result = '';
+      const keyLength = KEY.length;
+
+      for (let i = 0; i < input.length; i++) {
+          const char = input[i];
+          const keyChar = KEY[i % keyLength];
+          const charCode = char.charCodeAt(0);
+          const keyCode = keyChar.charCodeAt(0);
+
+          let processedCharCode;
+          if (mode === 'encrypt') {
+              processedCharCode = (charCode + keyCode) % 256;
+          } else {
+              processedCharCode = (charCode - keyCode + 256) % 256;
+          }
+
+          result += String.fromCharCode(processedCharCode);
+      }
+
+      return result;
+  }
+
+  // Base64 encoding for safe storage/transmission
+  function base64Encode(str) {
+      return btoa(str);
+  }
+
+  function base64Decode(str) {
+      return atob(str);
+  }
+
+  try {
+      if (encrypt) {
+          const processedText = processText(password, KEY, 'encrypt');
+          return base64Encode(processedText);
+      } else {
+          const decodedText = base64Decode(password);
+          return processText(decodedText, KEY, 'decrypt');
+      }
+  } catch (error) {
+      throw new Error('Encryption/Decryption failed');
+  }
+}
+
 async function scrapePremierLeagueFixtures() {
     try {
       // Fetch the HTML from the website
@@ -122,4 +175,4 @@ async function scrapePremierLeagueFixtures() {
     }
 }
 
-module.exports = { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures };
+module.exports = { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures, passwordCrypto };

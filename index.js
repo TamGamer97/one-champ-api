@@ -22,17 +22,23 @@ app.get('/Premier-League-Table', async(req, res) => {
 
 })
 
-app.get('/generate-user-id/:email', async(req, res) => { // figure out how to pass in email to request
-  const email = req.params.email; // Access the route parameter
-  console.log(email)
-  res.send(await generateUniqueUserId(email))
-})
-
 app.get('/Premier-League-Fixtures', async(req, res) => {
 
   res.send(await scrapePremierLeagueFixtures())
 
 })
+
+app.get('/generate-user-id/:email', async(req, res) => {
+  const email = req.params.email;
+  res.send(await generateUniqueUserId(email))
+})
+
+app.get('/crypt-password/:password/:encrypt', async(req, res) => {
+  const password = req.params.password;
+  const isEncrypt = req.params.encrypt
+  res.send(await passwordCrypto(password, isEncrypt))
+})
+
 
   
 app.get('/live-matches', async (req, res) => {
