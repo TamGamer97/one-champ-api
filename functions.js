@@ -67,11 +67,12 @@ async function generateUniqueUserId(email)
     return userId;
 }
 
-function passwordCrypto(password, KEY, encrypt = true) {
+function passwordCrypto(password, encrypt = true) {
+  const KEY = 'pmahCenO'
+  
   if (!password || !KEY) {
       throw new Error('Text and secret key are required');
   }
-  const KEY = 'pmahCenO'
 
   // Simple Vigenère cipher implementation
   function processText(input, mode) {
