@@ -22,8 +22,10 @@ app.get('/Premier-League-Table', async(req, res) => {
 
 })
 
-app.get('/generate-user-id', async(req, res) => { // figure out how to pass in email to request
-  res.send(await generateUniqueUserId())
+app.get('/generate-user-id/:email', async(req, res) => { // figure out how to pass in email to request
+  const email = req.params.email; // Access the route parameter
+  console.log(email)
+  res.send(await generateUniqueUserId(email))
 })
 
 app.get('/Premier-League-Fixtures', async(req, res) => {
@@ -175,6 +177,6 @@ app.get('/Team-Info', async(req, res) => {
 
 
 
-app.listen(3000, () => {console.log('Listening on port 5000'); console.log('One Champ Api')})
+app.listen(3000, () => {console.log('Listening on port 3000'); console.log('One Champ Api')})
 
 module.exports = app
