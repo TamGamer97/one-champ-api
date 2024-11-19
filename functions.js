@@ -2,14 +2,14 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const proxy = {
-  host: '108.170.12.14', // Proxy server IP
+  host: '198.50.152.201', // Proxy server IP
   port: 80
 };
 
 async function scrapeTable() {
     try {
       // Fetching the webpage content
-      const { data } = await axios.get('https://fbref.com/en/comps/9/Premier-League-Stats', {proxy});
+      const { data } = await axios.get('https://fbref.com/en/comps/9/Premier-League-Stats');
 
       // Load the content into cheerio
       const $ = cheerio.load(data);
