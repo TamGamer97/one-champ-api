@@ -67,22 +67,20 @@ async function generateUniqueUserId(email)
     return userId;
 }
 
-function passwordCrypto(password, encrypt = true) {
-  const KEY = 'pmahCenO'
-  
-  if (!password || !KEY) {
+function passwordCrypto(text, encrypt = true) {
+  const secret = 'pmahCenO'
+  if (!text || !secret) {
       throw new Error('Text and secret key are required');
   }
 
   // Simple Vigenère cipher implementation
-  function processText(input, mode) {
-
+  function processText(input, key, mode) {
       let result = '';
-      const keyLength = KEY.length;
+      const keyLength = key.length;
 
       for (let i = 0; i < input.length; i++) {
           const char = input[i];
-          const keyChar = KEY[i % keyLength];
+          const keyChar = key[i % keyLength];
           const charCode = char.charCodeAt(0);
           const keyCode = keyChar.charCodeAt(0);
 
@@ -110,11 +108,11 @@ function passwordCrypto(password, encrypt = true) {
 
   try {
       if (encrypt) {
-          const processedText = processText(password, KEY, 'encrypt');
+          const processedText = processText(text, secret, 'encrypt');
           return base64Encode(processedText);
       } else {
-          const decodedText = base64Decode(password);
-          return processText(decodedText, KEY, 'decrypt');
+          const decodedText = base64Decode(text);
+          return processText(decodedText, secret, 'decrypt');
       }
   } catch (error) {
       throw new Error('Encryption/Decryption failed');
