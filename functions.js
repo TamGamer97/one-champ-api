@@ -1,15 +1,18 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const proxy = {
-  host: '198.50.152.201', // Proxy server IP
+const proxyRunning = {
+  host: '108.170.12.14', // Proxy server IP
   port: 80
 };
+
+// IF timeout issue comes back, try changing the variable name from proxy to proxyRunnign as i've done and it works
+// Also try experimenting with different headers
 
 async function scrapeTable() {
     try {
       // Fetching the webpage content
-      const { data } = await axios.get('https://fbref.com/en/comps/9/Premier-League-Stats');
+      const { data } = await axios.get('http://fbref.com/en/comps/9/Premier-League-Stats', {proxyRunning});
 
       // Load the content into cheerio
       const $ = cheerio.load(data);
@@ -122,7 +125,7 @@ function passwordCrypto(text, encrypt = true) {
 async function scrapePremierLeagueFixtures() {
     try {
       // Fetch the HTML from the website
-      const { data: html } = await axios.get('https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures', {proxy});
+      const { data: html } = await axios.get('https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures', {proxyRunning});
 
       // Load the HTML into cheerio
       const $ = cheerio.load(html);
