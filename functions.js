@@ -1,6 +1,12 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const { createClient } = require('@supabase/supabase-js');
+
+// Create a single supabase client for interacting with your database
+const supabase = createClient('https://nxnlueqwonfremybejbm.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54bmx1ZXF3b25mcmVteWJlamJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTE2NzAzODcsImV4cCI6MjAwNzI0NjM4N30.6cfViULSoEKQi0ImV8xTFwMoGL0uSy31aPRU-yUBFZ4')
+
+
 const proxyRunning = {
   host: '108.170.12.14', // Proxy server IP
   port: 80
@@ -177,4 +183,10 @@ async function scrapePremierLeagueFixtures() {
     }
 }
 
-module.exports = { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures, passwordCrypto };
+async function scoresSubmissionProcess()
+{
+    var {data} = await supabase.rpc("scores_submission_process")
+    return data
+}
+
+module.exports = { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures, passwordCrypto, scoresSubmissionProcess };

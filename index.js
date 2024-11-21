@@ -7,7 +7,7 @@ const app = express()
 // https://dashboard.back4app.com/apps
 // https://github.com/TamGamer97/one-champ-api/tree/back4app - back4app branch
 
-const { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures, passwordCrypto } = require('./functions.js');
+const { scrapeTable, generateUniqueUserId, scrapePremierLeagueFixtures, passwordCrypto, scoresSubmissionProcess } = require('./functions.js');
 
 
 app.get('/', (req, res) => {
@@ -40,69 +40,9 @@ app.get('/crypt-password/:password/:encrypt', async(req, res) => {
   res.send(passwordCrypto(password, isEncrypt))
 })
 
-
-  
-app.get('/live-matches', async (req, res) => {
-
-  async function scrapeLivescorePremierLeagueMatches() {
-    try {
-      console.log('Fetching data from Livescore...');
-      const { data: html } = await axios.get('https://www.livescore.com/en/football/england/premier-league/', {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-      });
-  
-      console.log('Parsing HTML...');
-      const dom = new JSDOM(html);
-      const document = dom.window.document;
-
-      console.log(document.querySelectorAll('[data-test-id=virtuoso-item-list]').length)
-      return
-      console.log('Extracting match data...');
-      const matchElements = Array.from(document.querySelectorAll('[data-test-id="virtuoso-item-list"]'));
-      
-      const matches = matchElements.map(element => {
-        const homeTeam = element.querySelector('[data-test-id="team-name-home"]')?.textContent.trim();
-        const awayTeam = element.querySelector('[data-test-id="team-name-away"]')?.textContent.trim();
-        const homeScore = element.querySelector('[data-test-id="home-score"]')?.textContent.trim();
-        const awayScore = element.querySelector('[data-test-id="away-score"]')?.textContent.trim();
-        const status = element.querySelector('[data-test-id="match-status"]')?.textContent.trim();
-  
-        return {
-          HomeTeam: homeTeam,
-          AwayTeam: awayTeam,
-          Score: `${homeScore || ''} - ${awayScore || ''}`.trim(),
-          Status: status
-        };
-      });
-  
-      console.log(`Processed ${matches.length} matches.`);
-  
-      if (matches.length === 0) {
-        console.log('No matches found. This could be because:');
-        console.log('1. There are no Premier League matches listed at the moment.');
-        console.log('2. The website structure has changed.');
-        console.log('3. The content is loaded dynamically and not present in the initial HTML.');
-        console.log('Dumping a portion of the HTML for debugging:');
-        console.log(html.slice(0, 1000)); // Print the first 1000 characters of HTML
-      }
-  
-      return matches;
-    } catch (error) {
-      console.error('Error scraping matches:', error);
-      if (error.response) {
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
-      }
-      return null;
-    }
-  }
-
-
-  const liveMatches = await scrapeLivescorePremierLeagueMatches();
-  res.send(liveMatches);
-});
+app.get('/scores-submission-process', async(req, res) => {
+  res.send(await scoresSubmissionProcess())
+})
 
 app.get('/Team-Info', async(req, res) => {
 
@@ -182,8 +122,71 @@ app.get('/Team-Info', async(req, res) => {
   res.send(teamImages)
 })
 
+  
+app.get('/live-matches', async (req, res) => {
+
+  async function scrapeLivescorePremierLeagueMatches() {
+    try {
+      console.log('Fetching data from Livescore...');
+      const { data: html } = await axios.get('https://www.livescore.com/en/football/england/premier-league/', {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      });
+  
+      console.log('Parsing HTML...');
+      const dom = new JSDOM(html);
+      const document = dom.window.document;
+
+      console.log(document.querySelectorAll('[data-test-id=virtuoso-item-list]').length)
+      return
+      console.log('Extracting match data...');
+      const matchElements = Array.from(document.querySelectorAll('[data-test-id="virtuoso-item-list"]'));
+      
+      const matches = matchElements.map(element => {
+        const homeTeam = element.querySelector('[data-test-id="team-name-home"]')?.textContent.trim();
+        const awayTeam = element.querySelector('[data-test-id="team-name-away"]')?.textContent.trim();
+        const homeScore = element.querySelector('[data-test-id="home-score"]')?.textContent.trim();
+        const awayScore = element.querySelector('[data-test-id="away-score"]')?.textContent.trim();
+        const status = element.querySelector('[data-test-id="match-status"]')?.textContent.trim();
+  
+        return {
+          HomeTeam: homeTeam,
+          AwayTeam: awayTeam,
+          Score: `${homeScore || ''} - ${awayScore || ''}`.trim(),
+          Status: status
+        };
+      });
+  
+      console.log(`Processed ${matches.length} matches.`);
+  
+      if (matches.length === 0) {
+        console.log('No matches found. This could be because:');
+        console.log('1. There are no Premier League matches listed at the moment.');
+        console.log('2. The website structure has changed.');
+        console.log('3. The content is loaded dynamically and not present in the initial HTML.');
+        console.log('Dumping a portion of the HTML for debugging:');
+        console.log(html.slice(0, 1000)); // Print the first 1000 characters of HTML
+      }
+  
+      return matches;
+    } catch (error) {
+      console.error('Error scraping matches:', error);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      }
+      return null;
+    }
+  }
 
 
-app.listen(7000, () => {console.log('Listening on port 3000'); console.log('One Champ Api')})
+  const liveMatches = await scrapeLivescorePremierLeagueMatches();
+  res.send(liveMatches);
+});
+
+
+
+app.listen(7000, () => {console.log('Listening on port 7000'); console.log('One Champ Api')})
 
 module.exports = app
